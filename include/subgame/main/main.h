@@ -18,49 +18,38 @@
  * MA 02110-1301, USA.
  *
  */
-#ifndef SUBGAME_H_
-#define SUBGAME_H_
+#ifndef SUBGAME_MAIN_MAIN_H_
+#define SUBGAME_MAIN_MAIN_H_
 
-#include "ui/ui.h"
-#include "game_state/game_state.h"
-#include "platform/audio.h"
+#include "subgame/subgame.h"
 
 namespace programmerjake
 {
 namespace game_puzzle
 {
-namespace ui
+namespace subgames
 {
-class GameUi;
-}
-
-class Subgame : public ui::Ui
+namespace main
+{
+class MainGame final : public Subgame
 {
 private:
-    bool mouseGrabbed;
-
-protected:
-    const std::shared_ptr<GameState> gameState;
-    ui::GameUi *const gameUi;
+    std::shared_ptr<Audio> backgroundMusic;
 
 public:
-    Subgame(std::shared_ptr<GameState> gameState,
-            ui::GameUi *gameUi,
-            bool mouseGrabbed = true,
-            ColorF background = GrayscaleF(0.4))
-        : Ui(background),
-          mouseGrabbed(mouseGrabbed),
-          gameState(std::move(gameState)),
-          gameUi(gameUi)
+    explicit MainGame(std::shared_ptr<GameState> gameState, ui::GameUi *gameUi)
+        : Subgame(std::move(gameState), gameUi),
+          backgroundMusic(std::make_shared<Audio>(L"main.ogg", true))
     {
     }
-    bool isMouseGrabbed() const
+    virtual std::shared_ptr<PlayingAudio> startBackgroundMusic() override
     {
-        return mouseGrabbed;
+        return backgroundMusic->play();
     }
-    virtual std::shared_ptr<PlayingAudio> startBackgroundMusic() = 0;
 };
 }
 }
+}
+}
 
-#endif /* SUBGAME_H_ */
+#endif /* SUBGAME_MAIN_MAIN_H_ */

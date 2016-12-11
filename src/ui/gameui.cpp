@@ -28,8 +28,8 @@
 #include "platform/thread_name.h"
 #include "util/tls.h"
 #include "ui/button.h"
-#include "subgame/main.h"
 #include <memory>
+#include "subgame/subgames.h"
 
 namespace programmerjake
 {
@@ -71,7 +71,7 @@ void GameUi::createNewGame()
         playingAudio->stop();
     playingAudio = nullptr;
     gameState = std::make_shared<GameState>();
-    mainGame = std::make_shared<MainGame>(gameState);
+    mainGame = subgames::makeMainSubgame(gameState, this);
     pushDialog(mainGame);
 }
 

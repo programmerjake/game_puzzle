@@ -18,49 +18,21 @@
  * MA 02110-1301, USA.
  *
  */
-#ifndef SUBGAME_H_
-#define SUBGAME_H_
 
-#include "ui/ui.h"
-#include "game_state/game_state.h"
-#include "platform/audio.h"
+#ifndef SUBGAME_SUBGAMES_H_
+#define SUBGAME_SUBGAMES_H_
+
+#include "subgame/subgame.h"
 
 namespace programmerjake
 {
 namespace game_puzzle
 {
-namespace ui
+namespace subgames
 {
-class GameUi;
+std::shared_ptr<Subgame> makeMainSubgame(std::shared_ptr<GameState> gameState, ui::GameUi *gameUi);
 }
-
-class Subgame : public ui::Ui
-{
-private:
-    bool mouseGrabbed;
-
-protected:
-    const std::shared_ptr<GameState> gameState;
-    ui::GameUi *const gameUi;
-
-public:
-    Subgame(std::shared_ptr<GameState> gameState,
-            ui::GameUi *gameUi,
-            bool mouseGrabbed = true,
-            ColorF background = GrayscaleF(0.4))
-        : Ui(background),
-          mouseGrabbed(mouseGrabbed),
-          gameState(std::move(gameState)),
-          gameUi(gameUi)
-    {
-    }
-    bool isMouseGrabbed() const
-    {
-        return mouseGrabbed;
-    }
-    virtual std::shared_ptr<PlayingAudio> startBackgroundMusic() = 0;
-};
 }
 }
 
-#endif /* SUBGAME_H_ */
+#endif /* SUBGAME_SUBGAMES_H_ */

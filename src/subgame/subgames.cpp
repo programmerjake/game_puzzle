@@ -18,31 +18,19 @@
  * MA 02110-1301, USA.
  *
  */
-#ifndef SUBGAME_MAIN_H_
-#define SUBGAME_MAIN_H_
-
-#include "subgame/subgame.h"
+#include "subgame/subgames.h"
+#include "subgame/main/main.h"
 
 namespace programmerjake
 {
 namespace game_puzzle
 {
-class MainGame final : public Subgame
+namespace subgames
 {
-private:
-    std::shared_ptr<Audio> backgroundMusic;
-
-public:
-    explicit MainGame(std::shared_ptr<GameState> gameState)
-        : Subgame(std::move(gameState)), backgroundMusic(std::make_shared<Audio>(L"main.ogg", true))
-    {
-    }
-    virtual std::shared_ptr<PlayingAudio> startBackgroundMusic() override
-    {
-        return backgroundMusic->play();
-    }
-};
+std::shared_ptr<Subgame> makeMainSubgame(std::shared_ptr<GameState> gameState, ui::GameUi *gameUi)
+{
+    return std::make_shared<main::MainGame>(std::move(gameState), gameUi);
 }
 }
-
-#endif /* SUBGAME_MAIN_H_ */
+}
+}
