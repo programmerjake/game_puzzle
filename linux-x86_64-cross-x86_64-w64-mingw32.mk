@@ -1,9 +1,4 @@
 BUILD_ARCH := cross-x86_64-w64-mingw32
-OPENSSL_ARCH := mingw64
-LIBCRYPTO_BASENAME := crypto
-LIBSSL_BASENAME := ssl
-LIBCRYPTO_NAME := libcrypto.a
-LIBSSL_NAME := libssl.a
 CHOST := x86_64-w64-mingw32
 EXEEXT := .exe
 ifeq '$(CFLAGS)' ''

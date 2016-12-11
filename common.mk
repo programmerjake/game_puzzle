@@ -29,15 +29,6 @@ HEADERS += $(wildcard $(SOURCE_DIR)/include/*/*/*/*/*/*.h)
 CPPFLAGS += -I$(SOURCE_DIR)/include
 EXTERNAL_SOURCES_DIR := $(SOURCE_DIR)/external-lib
 BUILD_DIR := $(abspath build-$(BUILD_ARCH))
-OPENSSL_BUILD_DIR := $(BUILD_DIR)/openssl
-OPENSSL_BUILD_SCRIPT := $(OPENSSL_BUILD_DIR)/Configure
-OPENSSL_BUILD_MAKEFILE := $(OPENSSL_BUILD_DIR)/Makefile
-OPENSSL_INCLUDE_DIR := $(OPENSSL_BUILD_DIR)/include
-OPENSSL_LIB_DIR := $(OPENSSL_BUILD_DIR)
-HEADERS += $(OPENSSL_BUILD_MAKEFILE)
-LIBCRYPTO := $(OPENSSL_BUILD_DIR)/$(LIBCRYPTO_NAME)
-LIBSSL := $(OPENSSL_BUILD_DIR)/$(LIBSSL_NAME)
-LIBS += $(LIBSSL) $(LIBCRYPTO)
 LIBPNG_BUILD_DIR := $(BUILD_DIR)/libpng
 LIBPNG_BUILD_AUTOGEN := $(LIBPNG_BUILD_DIR)/autogen.sh
 LIBPNG_BUILD_CONFIGURE := $(LIBPNG_BUILD_DIR)/configure
@@ -58,6 +49,7 @@ LIBZ := $(ZLIB_BUILD_DIR)/libz.a
 LIBS += $(LIBZ)
 VORBIS_BUILD_DIR := $(BUILD_DIR)/vorbis
 VORBIS_BUILD_AUTOGEN := $(VORBIS_BUILD_DIR)/autogen.sh
+VORBIS_BUILD_CONFIGURE := $(VORBIS_BUILD_DIR)/configure
 VORBIS_BUILD_MAKEFILE := $(VORBIS_BUILD_DIR)/Makefile
 VORBIS_INCLUDE_DIR := $(VORBIS_BUILD_DIR)/include
 VORBIS_LIB_DIR := $(VORBIS_BUILD_DIR)
@@ -68,6 +60,7 @@ LIBVORBISFILE := $(VORBIS_BUILD_DIR)/libvorbisfile.a
 LIBS += $(LIBVORBISFILE) $(LIBVORBIS)
 OGG_BUILD_DIR := $(BUILD_DIR)/ogg
 OGG_BUILD_AUTOGEN := $(OGG_BUILD_DIR)/autogen.sh
+OGG_BUILD_CONFIGURE := $(OGG_BUILD_DIR)/configure
 OGG_BUILD_MAKEFILE := $(OGG_BUILD_DIR)/Makefile
 OGG_INCLUDE_DIR := $(OGG_BUILD_DIR)/include
 OGG_LIB_DIR := $(OGG_BUILD_DIR)
@@ -85,7 +78,7 @@ LIBSDL2_LA := $(SDL_BUILD_DIR)/build/.libs/libSDL2.la
 LIBSDL2 := $(SDL_BUILD_DIR)/build/libSDL2.a
 LIBSDL2MAIN := $(SDL_BUILD_DIR)/build/libSDL2main.a
 LIBS += $(LIBSDL2) -Wl,--whole-archive $(LIBSDL2MAIN) -Wl,--no-whole-archive
-PROGRAM_NAME := voxels$(EXEEXT)
+PROGRAM_NAME := game_puzzle$(EXEEXT)
 PROGRAM := $(BUILD_DIR)/$(PROGRAM_NAME)
 CPP_SOURCES := $(wildcard $(SOURCE_DIR)/src/*.cpp)
 CPP_SOURCES += $(wildcard $(SOURCE_DIR)/src/*/*.cpp)
@@ -103,19 +96,6 @@ SOURCES := $(CPP_SOURCES) $(C_SOURCES)
 OBJECTS := $(CPP_SOURCES:$(SOURCE_DIR)/%.cpp=$(BUILD_DIR)/%.o) $(C_SOURCES:$(SOURCE_DIR)/%.c=$(BUILD_DIR)/%.o)
 
 all: $(PROGRAM)
-
-$(OPENSSL_BUILD_SCRIPT): ;
-	mkdir -p $(BUILD_DIR) \
-	&& { rm -rf $(OPENSSL_BUILD_DIR); cp -r -T $(EXTERNAL_SOURCES_DIR)/openssl $(OPENSSL_BUILD_DIR); } \
-	&& [ -x $(OPENSSL_BUILD_SCRIPT) ]
-
-$(OPENSSL_BUILD_MAKEFILE): $(OPENSSL_BUILD_SCRIPT)
-	cd $(OPENSSL_BUILD_DIR) && ./Configure $(OPENSSL_ARCH) no-shared no-ssl2 no-ssl3 no-zlib
-
-$(LIBSSL) : $(OPENSSL_BUILD_MAKEFILE)
-	cd $(OPENSSL_BUILD_DIR) && $(MAKE)
-
-$(LIBCRYPTO) : $(LIBSSL)
 
 $(LIBPNG_BUILD_AUTOGEN): ;
 	mkdir -p $(BUILD_DIR) \
@@ -169,8 +149,11 @@ $(OGG_BUILD_AUTOGEN): ;
 	&& { rm -rf $(OGG_BUILD_DIR); cp -r -T $(EXTERNAL_SOURCES_DIR)/ogg $(OGG_BUILD_DIR); } \
 	&& [ -x $(OGG_BUILD_AUTOGEN) ]
 
-$(OGG_BUILD_MAKEFILE): $(OGG_BUILD_AUTOGEN)
-	cd $(OGG_BUILD_DIR) && ./autogen.sh --disable-dependency-tracking --disable-shared --host $(CHOST)
+$(OGG_BUILD_CONFIGURE): $(OGG_BUILD_AUTOGEN)
+	cd $(OGG_BUILD_DIR) && ./autogen.sh
+
+$(OGG_BUILD_MAKEFILE): $(OGG_BUILD_CONFIGURE)
+	cd $(OGG_BUILD_DIR) && ./configure --disable-dependency-tracking --disable-shared --host $(CHOST)
 
 $(LIBOGG_LA): $(OGG_BUILD_MAKEFILE)
 	cd $(OGG_BUILD_DIR) && $(MAKE)
@@ -183,8 +166,11 @@ $(VORBIS_BUILD_AUTOGEN): ;
 	&& { rm -rf $(VORBIS_BUILD_DIR); cp -r -T $(EXTERNAL_SOURCES_DIR)/vorbis $(VORBIS_BUILD_DIR); } \
 	&& [ -x $(VORBIS_BUILD_AUTOGEN) ]
 
-$(VORBIS_BUILD_MAKEFILE): $(VORBIS_BUILD_AUTOGEN) $(LIBOGG)
-	cd $(VORBIS_BUILD_DIR) && LDFLAGS=-L$(OGG_LIB_DIR) CPPFLAGS=-I$(OGG_INCLUDE_DIR) ./autogen.sh --disable-dependency-tracking --disable-shared --host $(CHOST)
+$(VORBIS_BUILD_CONFIGURE): $(VORBIS_BUILD_AUTOGEN) $(LIBOGG)
+	cd $(VORBIS_BUILD_DIR) && LDFLAGS=-L$(OGG_LIB_DIR) CPPFLAGS=-I$(OGG_INCLUDE_DIR) ./autogen.sh
+
+$(VORBIS_BUILD_MAKEFILE): $(VORBIS_BUILD_CONFIGURE) $(LIBOGG)
+	cd $(VORBIS_BUILD_DIR) && LDFLAGS=-L$(OGG_LIB_DIR) CPPFLAGS=-I$(OGG_INCLUDE_DIR) ./configure --disable-dependency-tracking --disable-shared --host $(CHOST)
 
 $(LIBVORBISFILE_LA): $(VORBIS_BUILD_MAKEFILE)
 	cd $(VORBIS_BUILD_DIR) && $(MAKE)
@@ -213,7 +199,6 @@ $(LIBSDL2MAIN): $(LIBSDL2_LA)
 
 CXXFLAGS := -std=c++11
 CFLAGS += -Wall
-CPPFLAGS += -I$(OPENSSL_INCLUDE_DIR)
 CPPFLAGS += -I$(ZLIB_INCLUDE_DIR)
 CPPFLAGS += -I$(LIBPNG_INCLUDE_DIR)
 CPPFLAGS += -I$(OGG_INCLUDE_DIR)
@@ -228,7 +213,7 @@ $(BUILD_DIR)/%.o : $(SOURCE_DIR)/%.cpp $(HEADERS)
 
 LDFLAGS += -static-libgcc -static-libstdc++
 
-$(PROGRAM) : $(OBJECTS) $(LIBSDL2) $(LIBSDL2MAIN) $(LIBPNG) $(LIBOGG) $(LIBVORBISFILE) $(LIBVORBIS) $(LIBCRYPTO) $(LIBSSL) $(LIBZ)
+$(PROGRAM) : $(OBJECTS) $(LIBSDL2) $(LIBSDL2MAIN) $(LIBPNG) $(LIBOGG) $(LIBVORBISFILE) $(LIBVORBIS) $(LIBZ)
 	$(CXX) -o $(PROGRAM) $(OBJECTS) $(LDFLAGS) $(LIBS) $(DEFERRED_LDFLAGS)
 
 install: all
@@ -239,11 +224,11 @@ clean:
 distclean: clean
 	-rm -rf $(BUILD_DIR)
 
-ARCHIVE_NAME := voxels$(ARCHIVE_EXTENSION)
+ARCHIVE_NAME := game_puzzle$(ARCHIVE_EXTENSION)
 
 bin-archive: all
-	mkdir -p $(BUILD_DIR)/voxels-0.7 \
-	&& cp -rt $(BUILD_DIR)/voxels-0.7 $(PROGRAM) $(SOURCE_DIR)/res $(SOURCE_DIR)/LICENSE $(SOURCE_DIR)/README.md \
+	mkdir -p $(BUILD_DIR)/game_puzzle-0.1 \
+	&& cp -rt $(BUILD_DIR)/game_puzzle-0.1 $(PROGRAM) $(SOURCE_DIR)/res $(SOURCE_DIR)/LICENSE $(SOURCE_DIR)/README.md \
 	&& cd $(BUILD_DIR) \
 	&& { rm -f $(ARCHIVE_NAME) || true; } \
-	&& $(ARCHIVE_COMMAND) $(ARCHIVE_NAME) voxels-0.7
+	&& $(ARCHIVE_COMMAND) $(ARCHIVE_NAME) game_puzzle-0.1
