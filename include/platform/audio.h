@@ -903,6 +903,10 @@ public:
     bool isPlaying();
     double currentTime();
     void stop();
+    void detach()
+    {
+        data = nullptr;
+    }
     float volume();
     void volume(float v);
     double duration();

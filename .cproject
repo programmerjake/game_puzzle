@@ -14,7 +14,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration buildProperties="" description="" id="cdt.managedbuild.toolchain.gnu.base.368139539" name="Linux x86_64" parent="org.eclipse.cdt.build.core.emptycfg">
+				<configuration artifactName="${ProjName}" buildProperties="" description="" id="cdt.managedbuild.toolchain.gnu.base.368139539" name="Linux x86_64" parent="org.eclipse.cdt.build.core.emptycfg">
 					<folderInfo id="cdt.managedbuild.toolchain.gnu.base.368139539.1521495873" name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.base.8101967" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.base">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.target.gnu.platform.base.1749988912" name="Debug Platform" osList="linux,hpux,aix,qnx" superClass="cdt.managedbuild.target.gnu.platform.base"/>
@@ -26,13 +26,13 @@
 							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1249603045" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.562739657" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
 								<option id="gnu.cpp.compiler.option.include.paths.66180986" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/game_puzzle/game_puzzle/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/game_puzzle/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.27550258" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.1210589424" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
 								<option id="gnu.c.compiler.option.include.paths.1814875010" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/game_puzzle/game_puzzle/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/game_puzzle/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1477698070" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
@@ -45,7 +45,7 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.base.1738213444" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
 								<option id="gnu.both.asm.option.include.paths.1187058342" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/game_puzzle/game_puzzle/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/game_puzzle/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.776839086" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -84,13 +84,13 @@
 							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1407167347" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.140667963" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
 								<option id="gnu.cpp.compiler.option.include.paths.405192630" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/game_puzzle/game_puzzle/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/game_puzzle/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1334133410" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.54959561" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
 								<option id="gnu.c.compiler.option.include.paths.1852103026" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/game_puzzle/game_puzzle/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/game_puzzle/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1129598500" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
@@ -103,7 +103,7 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.base.980106755" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
 								<option id="gnu.both.asm.option.include.paths.831558323" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/game_puzzle/game_puzzle/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/game_puzzle/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.592993161" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -122,15 +122,6 @@
 		<project id="game_puzzle.null.569197802" name="game_puzzle"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.368139539;cdt.managedbuild.toolchain.gnu.base.368139539.1521495873;cdt.managedbuild.tool.gnu.c.compiler.base.1210589424;cdt.managedbuild.tool.gnu.c.compiler.input.1477698070">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.368139539;cdt.managedbuild.toolchain.gnu.base.368139539.1521495873;cdt.managedbuild.tool.gnu.cpp.compiler.base.562739657;cdt.managedbuild.tool.gnu.cpp.compiler.input.27550258">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-	</storageModule>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Windows x86_64">
 			<resource resourceType="PROJECT" workspacePath="/game_puzzle"/>
@@ -143,4 +134,19 @@
 		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.368139539;cdt.managedbuild.toolchain.gnu.base.368139539.1521495873;cdt.managedbuild.tool.gnu.c.compiler.base.1210589424;cdt.managedbuild.tool.gnu.c.compiler.input.1477698070">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.368139539.195362860;cdt.managedbuild.toolchain.gnu.base.368139539.195362860.;cdt.managedbuild.tool.gnu.c.compiler.base.54959561;cdt.managedbuild.tool.gnu.c.compiler.input.1129598500">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.368139539;cdt.managedbuild.toolchain.gnu.base.368139539.1521495873;cdt.managedbuild.tool.gnu.cpp.compiler.base.562739657;cdt.managedbuild.tool.gnu.cpp.compiler.input.27550258">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.368139539.195362860;cdt.managedbuild.toolchain.gnu.base.368139539.195362860.;cdt.managedbuild.tool.gnu.cpp.compiler.base.140667963;cdt.managedbuild.tool.gnu.cpp.compiler.input.1334133410">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+	</storageModule>
 </cproject>

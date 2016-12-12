@@ -49,10 +49,11 @@ Image loadImage(std::wstring name)
 }
 }
 
-checked_array<TextureAtlas::ImageDescriptor, 1> &TextureAtlas::textures()
+checked_array<TextureAtlas::ImageDescriptor, TextureAtlas::textureCount> &TextureAtlas::textures()
 {
-    static checked_array<TextureAtlas::ImageDescriptor, 1> retval = {
+    static checked_array<TextureAtlas::ImageDescriptor, textureCount> retval = {
         TextureAtlas::ImageDescriptor(L"textures.png", 256, 256),
+        TextureAtlas::ImageDescriptor(L"steel.png", 256, 256),
     };
     return retval;
 }
@@ -72,6 +73,7 @@ Image TextureAtlas::texture(std::size_t textureIndex)
 }
 
 const TextureAtlas TextureAtlas::Font8x8 = {0, 0, 128, 128, 0},
-                   TextureAtlas::Blank = {90, 106, 4, 4, 0};
+        TextureAtlas::Blank = {90, 106, 4, 4, 0},
+        TextureAtlas::Steel = {0, 0, 256, 256, 1};
 }
 }

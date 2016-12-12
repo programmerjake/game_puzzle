@@ -100,7 +100,7 @@ inline ColorizedMeshRRef reverse(ColorizedMeshRRef &&mesh)
 }
 
 template <typename Fn>
-inline Mesh lightMesh(Mesh m, Fn &lightVertex)
+inline Mesh lightMesh(Mesh m, Fn &&lightVertex)
 {
     for(Vertex &v : m.vertices)
     {
@@ -110,6 +110,19 @@ inline Mesh lightMesh(Mesh m, Fn &lightVertex)
         v.c = lightVertex(color, position, normal);
     }
     return m;
+}
+
+inline Mesh lightMesh(Mesh m, VectorF lightDirection, float lightIntensity, float ambientIntensity)
+{
+    lightDirection = normalizeNoThrow(lightDirection);
+    return lightMesh(std::move(m),
+                     [&](ColorF color, VectorF position, VectorF normal) -> ColorF
+                     {
+                         auto factor = dot(normal, lightDirection);
+                         if(factor < 0)
+                             factor = 0;
+                         return scaleF(factor * lightIntensity + ambientIntensity, color);
+                     });
 }
 
 struct CutMesh

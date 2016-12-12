@@ -112,6 +112,7 @@ public:
         if(dialogStack.empty())
         {
             Display::grabMouse(false);
+            clearGame();
             startMainMenu();
         }
         if(playingAudio && !playingAudio->isPlaying())
