@@ -23,6 +23,10 @@
 #define SUBGAME_MAZE_MAZE_H_
 
 #include "subgame/subgame.h"
+#include "subgame/maze/maze_map.h"
+#include "util/math_constants.h"
+#include <algorithm>
+#include "texture/texture_atlas.h"
 
 namespace programmerjake
 {
@@ -34,8 +38,121 @@ namespace maze
 {
 class MazeGame final : public Subgame
 {
+private:
+    std::shared_ptr<Audio> backgroundMusic;
+    std::shared_ptr<const MazeMap> mazeMap;
+    std::shared_ptr<bool> won;
+    VectorF position;
+    bool leftPressed = false;
+    bool rightPressed = false;
+    bool upPressed = false;
+    bool downPressed = false;
+    float deltaViewTheta = 0;
+    float viewTheta = 0;
+    float wonTimeLeft = 1;
+
 public:
-#error finish
+    MazeGame(std::shared_ptr<GameState> gameState,
+             ui::GameUi *gameUi,
+             std::shared_ptr<const MazeMap> mazeMap,
+             std::shared_ptr<bool> won)
+        : Subgame(std::move(gameState), gameUi, false),
+          backgroundMusic(std::make_shared<Audio>(L"maze.ogg", true)),
+          mazeMap(std::move(mazeMap)),
+          won(std::move(won)),
+          position(this->mazeMap->width / 2 + 0.5f, 0, this->mazeMap->height / 2 + 0.5f)
+    {
+        for(std::size_t y = 0; y < this->mazeMap->height; y++)
+        {
+            for(std::size_t x = 0; x < this->mazeMap->width; x++)
+            {
+                if(this->mazeMap->get(x, y).type == Cell::Type::Start)
+                {
+                    position = VectorF(x + 0.5f, 0, y + 0.5f);
+                    return;
+                }
+            }
+        }
+    }
+    virtual bool handleKeyUp(KeyUpEvent &event) override
+    {
+        if(Subgame::handleKeyUp(event))
+            return true;
+        switch(event.key)
+        {
+        case KeyboardKey::Left:
+            leftPressed = false;
+            return true;
+        case KeyboardKey::Right:
+            rightPressed = false;
+            return true;
+        case KeyboardKey::Up:
+            upPressed = false;
+            return true;
+        case KeyboardKey::Down:
+            downPressed = false;
+            return true;
+        default:
+            return false;
+        }
+        return false;
+    }
+    virtual bool handleKeyDown(KeyDownEvent &event) override
+    {
+        if(Subgame::handleKeyDown(event))
+            return true;
+        switch(event.key)
+        {
+        case KeyboardKey::Left:
+            leftPressed = true;
+            return true;
+        case KeyboardKey::Right:
+            rightPressed = true;
+            return true;
+        case KeyboardKey::Up:
+            upPressed = true;
+            return true;
+        case KeyboardKey::Down:
+            downPressed = true;
+            return true;
+        default:
+            return false;
+        }
+    }
+    virtual bool handleMouseMove(MouseMoveEvent &event) override
+    {
+        if(Subgame::handleMouseMove(event))
+            return true;
+        if(!*won)
+            deltaViewTheta += event.deltaX * -1.5f * Display::scaleX() / Display::width();
+        return true;
+    }
+    static VectorF hit2DBox(VectorI boxPosition, VectorF position, float minDistance);
+    virtual void move(double deltaTime) override;
+    virtual void clear(Renderer &renderer) override;
+    virtual std::shared_ptr<PlayingAudio> startBackgroundMusic() override
+    {
+        return backgroundMusic->play();
+    }
+};
+
+class MazeGameMaker final : public SubgameMaker
+{
+public:
+    MazeGameMaker() : SubgameMaker(TextureAtlas::PlatformScreenshot.td(), L"maze")
+    {
+#warning fix texture
+    }
+    virtual std::shared_ptr<Subgame> makeSubgame(std::shared_ptr<GameState> gameState,
+                                                 ui::GameUi *gameUi,
+                                                 std::shared_ptr<bool> result) const override
+    {
+        return std::make_shared<maze::MazeGame>(
+            gameState,
+            gameUi,
+            std::make_shared<maze::MazeMap>(maze::MazeMap::makeRandom(16, 16)),
+            result);
+    }
 };
 }
 }

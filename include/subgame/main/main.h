@@ -29,7 +29,6 @@
 #include "subgame/main/and_gate.h"
 #include "subgame/main/or_gate.h"
 #include "subgame/main/run_game.h"
-#include "texture/texture_atlas.h"
 
 namespace programmerjake
 {
@@ -52,34 +51,7 @@ private:
     bool doorOpen = false;
 
 public:
-    explicit MainGame(std::shared_ptr<GameState> gameState, ui::GameUi *gameUi)
-        : Subgame(std::move(gameState), gameUi, false, RGBF(0.75, 0.75, 0.75)),
-          backgroundMusic(std::make_shared<Audio>(L"main.ogg", true)),
-          doorOpenSound(std::make_shared<Audio>(L"door_open.ogg")),
-          door(std::make_shared<Door>())
-    {
-        addMachine(door);
-        auto toggleSwitch1 = std::make_shared<ToggleSwitch>(0.6f, -0.3f);
-        addMachine(toggleSwitch1);
-        auto toggleSwitch2 = std::make_shared<RunGame>(
-            0.6f,
-            0,
-            std::make_shared<SubgameMaker>(TextureAtlas::PlatformScreenshot.td(), L"platform"),
-            gameState,
-            gameUi);
-        addMachine(toggleSwitch2);
-        auto toggleSwitch3 = std::make_shared<ToggleSwitch>(0.6f, 0.3);
-        addMachine(toggleSwitch3);
-        auto andGate = std::make_shared<AndGate>(0, 0);
-        addMachine(andGate);
-        auto orGate = std::make_shared<OrGate>(0.3f, 0);
-        addMachine(orGate);
-        door->addInput(andGate->output);
-        andGate->addInput(toggleSwitch1->output);
-        andGate->addInput(orGate->output);
-        orGate->addInput(toggleSwitch2->output);
-        orGate->addInput(toggleSwitch3->output);
-    }
+    MainGame(std::shared_ptr<GameState> gameState, ui::GameUi *gameUi);
     virtual std::shared_ptr<PlayingAudio> startBackgroundMusic() override
     {
         return backgroundMusic->play();

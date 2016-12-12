@@ -35,7 +35,7 @@ struct TextureAtlas final
     std::size_t textureIndex;
 
 public:
-    static const TextureAtlas Blank, Font8x8, Steel, PlatformScreenshot;
+    static const TextureAtlas Blank, Font8x8, Steel, PlatformScreenshot, MazeWall1, MazeWall2, MazeWall3, MazeWall4, MazeFinish;
 
 public:
     static Image texture(std::size_t textureIndex);

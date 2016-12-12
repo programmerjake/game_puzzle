@@ -45,6 +45,7 @@ public:
     const std::shared_ptr<SubgameMaker> subgameMaker;
     std::shared_ptr<GameState> gameState;
     ui::GameUi *const gameUi;
+    float eventDelay = 0;
     RunGame(float x,
             float y,
             std::shared_ptr<SubgameMaker> subgameMaker,
@@ -61,12 +62,27 @@ public:
     {
     }
 
+    virtual void move(double deltaTime) override
+    {
+        ClickableMachine::move(deltaTime);
+        if(eventDelay > 0)
+        {
+            eventDelay -= deltaTime;
+            if(eventDelay <= 0)
+            {
+                eventDelay = 0;
+                auto subgame = subgameMaker->makeSubgame(
+                    gameState, gameUi, *won ? std::make_shared<bool>(false) : won);
+                if(subgame)
+                    gameUi->pushDialog(subgame);
+            }
+        }
+    }
+
 protected:
     virtual void onClick(PlatformEvent &event) override
     {
-        auto subgame = subgameMaker->makeSubgame(gameState, gameUi, won);
-        if(subgame)
-            gameUi->pushDialog(subgame);
+        eventDelay = 0.2;
     }
     virtual bool transferFunction() override
     {

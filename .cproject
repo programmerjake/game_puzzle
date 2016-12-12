@@ -134,7 +134,7 @@
 					<folderInfo id="cdt.managedbuild.toolchain.gnu.base.368139539.2000136510." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.base.1224300173" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.base">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.target.gnu.platform.base.1097924534" name="Debug Platform" osList="linux,hpux,aix,qnx" superClass="cdt.managedbuild.target.gnu.platform.base"/>
-							<builder arguments="-f linux-x86_64.mk CFLAGS=&quot;-Og -g&quot; BUILD_ARCH=&quot;linux-x86_64-debug&quot;" command="make" id="cdt.managedbuild.target.gnu.builder.base.1470134635" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="cdt.managedbuild.target.gnu.builder.base">
+							<builder arguments="-f linux-x86_64.mk CFLAGS=&quot;-g&quot; BUILD_ARCH=&quot;linux-x86_64-debug&quot;" command="make" id="cdt.managedbuild.target.gnu.builder.base.1470134635" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="cdt.managedbuild.target.gnu.builder.base">
 								<outputEntries>
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name=""/>
 								</outputEntries>

@@ -21,6 +21,8 @@
 #include "subgame/main/main.h"
 #include "util/math_constants.h"
 #include <algorithm>
+#include "subgame/maze/maze.h"
+#include "texture/texture_atlas.h"
 
 namespace programmerjake
 {
@@ -30,6 +32,31 @@ namespace subgames
 {
 namespace main
 {
+MainGame::MainGame(std::shared_ptr<GameState> gameState, ui::GameUi *gameUi)
+    : Subgame(std::move(gameState), gameUi, false, RGBF(0.75, 0.75, 0.75)),
+      backgroundMusic(std::make_shared<Audio>(L"main.ogg", true)),
+      doorOpenSound(std::make_shared<Audio>(L"door_open.ogg")),
+      door(std::make_shared<Door>())
+{
+    addMachine(door);
+    auto toggleSwitch1 = std::make_shared<ToggleSwitch>(0.6f, -0.3f);
+    addMachine(toggleSwitch1);
+    auto toggleSwitch2 =
+        std::make_shared<RunGame>(0.6f, 0, std::make_shared<maze::MazeGameMaker>(), gameState, gameUi);
+    addMachine(toggleSwitch2);
+    auto toggleSwitch3 = std::make_shared<ToggleSwitch>(0.6f, 0.3);
+    addMachine(toggleSwitch3);
+    auto andGate = std::make_shared<AndGate>(0, 0);
+    addMachine(andGate);
+    auto orGate = std::make_shared<OrGate>(0.3f, 0);
+    addMachine(orGate);
+    door->addInput(andGate->output);
+    andGate->addInput(toggleSwitch1->output);
+    andGate->addInput(orGate->output);
+    orGate->addInput(toggleSwitch2->output);
+    orGate->addInput(toggleSwitch3->output);
+}
+
 void MainGame::clear(Renderer &renderer)
 {
     Ui::clear(renderer);
@@ -38,15 +65,16 @@ void MainGame::clear(Renderer &renderer)
     auto lightDirection = VectorF(5, 5, 3);
     float lightIntensity = 0.5;
     float ambientIntensity = 0.5;
-    renderer << lightMesh(reverse(
-        colorize(color,
-                 transform(Transform::scale(1.95f, 1.95f, 2).concat(Transform::translate(-0.975f, -0.975f, -1)),
-                           Generate::unitBox(TextureAtlas::Blank.td(),
-                                             TextureAtlas::Blank.td(),
-                                             TextureAtlas::Blank.td(),
-                                             TextureAtlas::Blank.td(),
-                                             TextureAtlas::Blank.td(),
-                                             TextureAtlas::Blank.td())))),
+    renderer << lightMesh(
+        reverse(colorize(color,
+                         transform(Transform::scale(1.95f, 1.95f, 2)
+                                       .concat(Transform::translate(-0.975f, -0.975f, -1)),
+                                   Generate::unitBox(TextureAtlas::Blank.td(),
+                                                     TextureAtlas::Blank.td(),
+                                                     TextureAtlas::Blank.td(),
+                                                     TextureAtlas::Blank.td(),
+                                                     TextureAtlas::Blank.td(),
+                                                     TextureAtlas::Blank.td())))),
         lightDirection,
         lightIntensity,
         ambientIntensity);

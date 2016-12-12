@@ -52,13 +52,11 @@ class GameUi : public Ui
 
 private:
     std::shared_ptr<PlayingAudio> playingAudio;
+    std::shared_ptr<Ui> playingAudioUi;
     bool addedUi = false;
     std::vector<std::shared_ptr<Ui>> dialogStack;
-    std::shared_ptr<Ui> newDialog = nullptr;
-    std::mutex newDialogLock;
-    void resetInput()
-    {
-    }
+    std::vector<std::shared_ptr<Ui>> newDialogs;
+    std::mutex newDialogsLock;
     std::shared_ptr<Ui> mainMenu;
     std::shared_ptr<Audio> mainMenuSong;
     std::shared_ptr<Subgame> mainGame;
@@ -73,12 +71,15 @@ public:
     virtual void move(double deltaTime) override
     {
         {
-            std::unique_lock<std::mutex> lockIt(newDialogLock);
-            if(newDialog != nullptr)
+            std::vector<std::shared_ptr<Ui>> newDialogs;
+            std::unique_lock<std::mutex> lockIt(newDialogsLock);
+            newDialogs.swap(this->newDialogs);
+            lockIt.unlock();
+            for(auto &newDialog : newDialogs)
             {
+                if(!dialogStack.empty())
+                    remove(dialogStack.back());
                 dialogStack.push_back(newDialog);
-                newDialog = nullptr;
-                lockIt.unlock();
                 add(dialogStack.back());
                 dialogStack.back()->reset();
             }
@@ -87,16 +88,13 @@ public:
         {
             setFocus(dialogStack.back());
         }
-        if(!dialogStack.empty())
-        {
-            resetInput();
-        }
         Display::grabMouse(
             !dialogStack.empty() && dynamic_cast<const Subgame *>(dialogStack.back().get())
             && std::static_pointer_cast<Subgame>(dialogStack.back())->isMouseGrabbed());
         Ui::move(deltaTime);
         if(gameState)
             gameState->move(deltaTime);
+        auto oldTopDialog = dialogStack.empty() ? std::shared_ptr<Ui>() : dialogStack.back();
         for(auto i = dialogStack.begin(); i != dialogStack.end();)
         {
             auto &dialog = *i;
@@ -115,24 +113,35 @@ public:
             clearGame();
             startMainMenu();
         }
+        else if(oldTopDialog != dialogStack.back())
+        {
+            add(dialogStack.back());
+        }
         if(playingAudio && !playingAudio->isPlaying())
         {
             playingAudio = nullptr;
+            playingAudioUi = nullptr;
         }
-        if(!playingAudio)
+        if(playingAudioUi != (dialogStack.empty() ? nullptr : dialogStack.back()))
         {
             if(!dialogStack.empty() && dynamic_cast<const Subgame *>(dialogStack.back().get()))
+            {
                 playingAudio =
                     std::static_pointer_cast<Subgame>(dialogStack.back())->startBackgroundMusic();
+                playingAudioUi = dialogStack.back();
+            }
             else
+            {
                 playingAudio = mainMenuSong->play();
+                playingAudioUi = dialogStack.empty() ? nullptr : dialogStack.back();
+            }
         }
     }
-    void pushDialog(std::shared_ptr<Ui> nextDialog)
+    void pushDialog(std::shared_ptr<Ui> newDialog)
     {
-        assert(nextDialog);
-        std::unique_lock<std::mutex> lockIt(newDialogLock);
-        this->newDialog = nextDialog;
+        assert(newDialog);
+        std::unique_lock<std::mutex> lockIt(newDialogsLock);
+        newDialogs.push_back(newDialog);
     }
     virtual bool handleKeyDown(KeyDownEvent &event) override
     {
@@ -151,7 +160,6 @@ public:
     }
     virtual void reset() override
     {
-        resetInput();
         if(!addedUi)
         {
             addedUi = true;

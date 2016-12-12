@@ -76,6 +76,11 @@ Image TextureAtlas::texture(std::size_t textureIndex)
 const TextureAtlas TextureAtlas::Font8x8 = {0, 0, 128, 128, 0},
                    TextureAtlas::Blank = {90, 106, 4, 4, 0},
                    TextureAtlas::Steel = {0, 0, 256, 256, 1},
-                   TextureAtlas::PlatformScreenshot = {0, 0, 128, 128, 2};
+                   TextureAtlas::PlatformScreenshot = {0, 0, 128, 128, 2},
+                   TextureAtlas::MazeWall1 = {128, 0, 16, 16, 0},
+                   TextureAtlas::MazeWall2 = {144, 0, 16, 16, 0},
+                   TextureAtlas::MazeWall3 = {128, 16, 16, 16, 0},
+                   TextureAtlas::MazeWall4 = {144, 16, 16, 16, 0},
+                   TextureAtlas::MazeFinish = {128, 32, 16, 16, 0};
 }
 }

@@ -83,7 +83,7 @@ void GameUi::addUi()
 
 GameUi::GameUi()
     : playingAudio(),
-      newDialogLock(),
+      newDialogsLock(),
       mainMenu(),
       mainMenuSong(std::make_shared<Audio>(L"menu.ogg", true)),
       gameState()
