@@ -63,7 +63,7 @@ struct Connection final : public ui::Element
         return false;
     }
     Connection(VectorF source, bool powered = false)
-        : Element(0, 0, 0, 0),
+        : Element(0, 0.1, 0, 0.1),
           source(source),
           targets(),
           powered(std::make_shared<MonitoredBool>(powered))

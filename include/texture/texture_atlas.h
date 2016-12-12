@@ -35,7 +35,7 @@ struct TextureAtlas final
     std::size_t textureIndex;
 
 public:
-    static const TextureAtlas Blank, Font8x8, Steel;
+    static const TextureAtlas Blank, Font8x8, Steel, PlatformScreenshot;
 
 public:
     static Image texture(std::size_t textureIndex);
@@ -90,7 +90,7 @@ private:
         ImageDescriptor(const ImageDescriptor &) = default;
         ImageDescriptor &operator=(const ImageDescriptor &) = delete;
     };
-    static constexpr std::size_t textureCount = 2;
+    static constexpr std::size_t textureCount = 3;
     static checked_array<ImageDescriptor, textureCount> &textures();
 };
 }

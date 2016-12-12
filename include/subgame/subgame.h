@@ -24,6 +24,7 @@
 #include "ui/ui.h"
 #include "game_state/game_state.h"
 #include "platform/audio.h"
+#include "texture/texture_descriptor.h"
 
 namespace programmerjake
 {
@@ -59,6 +60,24 @@ public:
         return mouseGrabbed;
     }
     virtual std::shared_ptr<PlayingAudio> startBackgroundMusic() = 0;
+};
+
+class SubgameMaker
+{
+public:
+    const TextureDescriptor screenshot;
+    const std::wstring name;
+    SubgameMaker(TextureDescriptor screenshot, std::wstring name)
+        : screenshot(screenshot), name(name)
+    {
+    }
+    virtual ~SubgameMaker() = default;
+    virtual std::shared_ptr<Subgame> makeSubgame(std::shared_ptr<GameState> gameState,
+                                                 ui::GameUi *gameUi,
+                                                 std::shared_ptr<bool> result) const
+    {
+        return nullptr;
+    }
 };
 }
 }

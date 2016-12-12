@@ -33,31 +33,23 @@ namespace main
 void MainGame::clear(Renderer &renderer)
 {
     Ui::clear(renderer);
-    auto xBackgroundCount = static_cast<std::int32_t>(std::ceil(Display::scaleX()));
-    auto yBackgroundCount = static_cast<std::int32_t>(std::ceil(Display::scaleY()));
     auto td = TextureAtlas::Steel.td();
-    auto color = GrayscaleF(0.9f);
+    auto color = GrayscaleF(0.4f);
     auto lightDirection = VectorF(5, 5, 3);
     float lightIntensity = 0.5;
     float ambientIntensity = 0.5;
-    for(std::int32_t x = -xBackgroundCount; x < xBackgroundCount; x++)
-    {
-        for(std::int32_t y = -yBackgroundCount; y < yBackgroundCount; y++)
-        {
-            renderer << lightMesh(Generate::quadrilateral(TextureAtlas::Blank.td(),
-                                                          VectorF(x, y, -1),
-                                                          color,
-                                                          VectorF(x + 1, y, -1),
-                                                          color,
-                                                          VectorF(x + 1, y + 1, -1),
-                                                          color,
-                                                          VectorF(x, y + 1, -1),
-                                                          color),
-                                  lightDirection,
-                                  lightIntensity,
-                                  ambientIntensity);
-        }
-    }
+    renderer << lightMesh(reverse(
+        colorize(color,
+                 transform(Transform::scale(1.95f, 1.95f, 2).concat(Transform::translate(-0.975f, -0.975f, -1)),
+                           Generate::unitBox(TextureAtlas::Blank.td(),
+                                             TextureAtlas::Blank.td(),
+                                             TextureAtlas::Blank.td(),
+                                             TextureAtlas::Blank.td(),
+                                             TextureAtlas::Blank.td(),
+                                             TextureAtlas::Blank.td())))),
+        lightDirection,
+        lightIntensity,
+        ambientIntensity);
     auto steelBox = Generate::unitBox(td, td, td, td, td, td);
     auto horizontalSteelBox = transform(Transform::translate(VectorF(-0.5f))
                                             .concat(Transform::rotateZ(M_PI_2))

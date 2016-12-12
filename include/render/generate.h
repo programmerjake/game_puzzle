@@ -30,20 +30,7 @@ namespace programmerjake
 {
 namespace game_puzzle
 {
-inline Mesh reverse(Mesh mesh)
-{
-    for(IndexedTriangle &tri : mesh.indexedTriangles)
-    {
-        tri = reverse(tri);
-    }
-    for(Vertex &v : mesh.vertices)
-    {
-        v = reverse(v);
-    }
-    return mesh;
-}
-
-inline Mesh &&reverse(Mesh &&mesh)
+inline Mesh reverse(Mesh &&mesh)
 {
     for(IndexedTriangle &tri : mesh.indexedTriangles)
     {
@@ -54,6 +41,11 @@ inline Mesh &&reverse(Mesh &&mesh)
         v = reverse(v);
     }
     return std::move(mesh);
+}
+
+inline Mesh reverse(const Mesh &mesh)
+{
+	return reverse(Mesh(mesh));
 }
 
 inline std::shared_ptr<Mesh> reverse(std::shared_ptr<Mesh> mesh)
@@ -83,19 +75,19 @@ inline ColorizedMesh reverse(ColorizedMesh mesh)
 
 inline TransformedMeshRRef reverse(TransformedMeshRRef &&mesh)
 {
-    reverse(mesh.mesh);
+    mesh.mesh = reverse(std::move(mesh.mesh));
     return std::move(mesh);
 }
 
 inline ColorizedTransformedMeshRRef reverse(ColorizedTransformedMeshRRef &&mesh)
 {
-    reverse(mesh.mesh);
+	mesh.mesh = reverse(std::move(mesh.mesh));
     return std::move(mesh);
 }
 
 inline ColorizedMeshRRef reverse(ColorizedMeshRRef &&mesh)
 {
-    reverse(mesh.mesh);
+	mesh.mesh = reverse(std::move(mesh.mesh));
     return std::move(mesh);
 }
 

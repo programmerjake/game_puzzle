@@ -35,7 +35,7 @@ namespace main
 class OrGate final : public Machine
 {
 public:
-    OrGate(float x, float y) : Machine(x, x, y, y, VectorF(x, y, 0))
+    OrGate(float x, float y) : Machine(x - 0.001f, x + 0.001f, y - 0.001f, y + 0.001f, VectorF(x, y, 0))
     {
     }
 

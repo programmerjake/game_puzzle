@@ -35,7 +35,7 @@ namespace main
 class AndGate final : public Machine
 {
 public:
-    static constexpr float xSize = 0.1, ySize = 0.15;
+    static constexpr float xSize = 0.1, ySize = 0.1;
     AndGate(float x, float y)
         : Machine(x - xSize * 0.5f,
                   x + xSize * 0.5f,
@@ -76,11 +76,11 @@ protected:
                 break;
             }
         }
-        auto color = powered ? RGBF(0.9f, 0.3f, 0.3f) : RGBF(0.5f, 0.3f, 0.3f);
+        auto color = powered ? RGBF(0.9f, 0.4f, 0.3f) : RGBF(0.5f, 0.3f, 0.3f);
         auto source = VectorF(maxX - Connection::lineWidth, (minY + maxY) * 0.5f, 0);
         auto target = VectorF(minX + Connection::lineWidth, (minY + maxY) * 0.5f, 0);
         target = transform(Transform::translate(-source)
-                               .concat(Transform::rotateZ(closed ? 0 : M_PI / 6))
+                               .concat(Transform::rotateZ(closed ? 0 : -M_PI / 6))
                                .concat(Transform::translate(source)),
                            target);
         Connection::renderLine(renderer, minZ, maxZ, source, target, color);

@@ -28,6 +28,8 @@
 #include "subgame/main/toggle_switch.h"
 #include "subgame/main/and_gate.h"
 #include "subgame/main/or_gate.h"
+#include "subgame/main/run_game.h"
+#include "texture/texture_atlas.h"
 
 namespace programmerjake
 {
@@ -45,7 +47,7 @@ private:
     std::shared_ptr<Door> door;
     std::vector<std::shared_ptr<Machine>> machines;
     bool didReset = false;
-    float doorPosition = -0.1;
+    float doorPosition = -0.4;
     float afterOpenTimeLeft = 1;
     bool doorOpen = false;
 
@@ -59,7 +61,12 @@ public:
         addMachine(door);
         auto toggleSwitch1 = std::make_shared<ToggleSwitch>(0.6f, -0.3f);
         addMachine(toggleSwitch1);
-        auto toggleSwitch2 = std::make_shared<ToggleSwitch>(0.6f, 0);
+        auto toggleSwitch2 = std::make_shared<RunGame>(
+            0.6f,
+            0,
+            std::make_shared<SubgameMaker>(TextureAtlas::PlatformScreenshot.td(), L"platform"),
+            gameState,
+            gameUi);
         addMachine(toggleSwitch2);
         auto toggleSwitch3 = std::make_shared<ToggleSwitch>(0.6f, 0.3);
         addMachine(toggleSwitch3);
