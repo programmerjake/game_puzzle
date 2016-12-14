@@ -119,25 +119,8 @@ public:
         if(static_cast<std::uint32_t>(x) < width && static_cast<std::uint32_t>(y) < height)
             cells[index(x, y)] = newValue;
     }
-    static MazeMap makeRandom(std::size_t width, std::size_t height)
-    {
-#warning finish
-        MazeMap retval(width, height);
-        for(std::size_t x = 0; x < width; x++)
-        {
-        	retval.set(x, 0, Cell(Cell::Type::Wall1));
-        	retval.set(x, height - 1, Cell(Cell::Type::Wall1));
-        }
-        for(std::size_t y = 0; y < height; y++)
-        {
-        	retval.set(0, y, Cell(Cell::Type::Wall1));
-        	retval.set(width - 1, y, Cell(Cell::Type::Wall1));
-        }
-        retval.set(width / 2, height / 2, Cell(Cell::Type::Start));
-        retval.set(width / 4, height / 4, Cell(Cell::Type::Finish));
-        retval.set(width * 3 / 4, height / 4, Cell(Cell::Type::Wall4));
-        return retval;
-    }
+    static MazeMap makeRandom(std::uint32_t size, std::uint64_t randomSeed);
+    static std::uint64_t makeRandomSeed();
 };
 }
 }

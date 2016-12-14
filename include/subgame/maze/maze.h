@@ -27,6 +27,8 @@
 #include "util/math_constants.h"
 #include <algorithm>
 #include "texture/texture_atlas.h"
+#include "util/game_version.h"
+#include "ui/label.h"
 
 namespace programmerjake
 {
@@ -50,17 +52,25 @@ private:
     float deltaViewTheta = 0;
     float viewTheta = 0;
     float wonTimeLeft = 1;
+    std::shared_ptr<ui::Label> instructionsLabel;
 
 public:
     MazeGame(std::shared_ptr<GameState> gameState,
              ui::GameUi *gameUi,
              std::shared_ptr<const MazeMap> mazeMap,
              std::shared_ptr<bool> won)
-        : Subgame(std::move(gameState), gameUi, false),
+        : Subgame(std::move(gameState), gameUi, !GameVersion::DEBUG),
           backgroundMusic(std::make_shared<Audio>(L"maze.ogg", true)),
           mazeMap(std::move(mazeMap)),
           won(std::move(won)),
-          position(this->mazeMap->width / 2 + 0.5f, 0, this->mazeMap->height / 2 + 0.5f)
+          position(this->mazeMap->width / 2 + 0.5f, 0, this->mazeMap->height / 2 + 0.5f),
+          instructionsLabel(std::make_shared<ui::Label>(
+              L"Use the arrow keys to move. Press escape to return from subgame.",
+              -1.0f,
+              1.0f,
+              0,
+              0.05f,
+              RGBF(1, 0, 0)))
     {
         for(std::size_t y = 0; y < this->mazeMap->height; y++)
         {
@@ -103,6 +113,9 @@ public:
             return true;
         switch(event.key)
         {
+        case KeyboardKey::Escape:
+            quit();
+            return true;
         case KeyboardKey::Left:
             leftPressed = true;
             return true;
@@ -134,14 +147,26 @@ public:
     {
         return backgroundMusic->play();
     }
+    virtual void layout() override
+    {
+        instructionsLabel->moveBottomTo(minY);
+        Subgame::layout();
+    }
+    virtual void reset() override
+    {
+        remove(instructionsLabel);
+        add(instructionsLabel);
+        Subgame::reset();
+    }
 };
 
 class MazeGameMaker final : public SubgameMaker
 {
 public:
-    MazeGameMaker() : SubgameMaker(TextureAtlas::PlatformScreenshot.td(), L"maze")
+    const std::uint64_t mazeSeed;
+    explicit MazeGameMaker(std::uint64_t mazeSeed = maze::MazeMap::makeRandomSeed())
+        : SubgameMaker(TextureAtlas::MazeScreenshot.td(), L"maze"), mazeSeed(mazeSeed)
     {
-#warning fix texture
     }
     virtual std::shared_ptr<Subgame> makeSubgame(std::shared_ptr<GameState> gameState,
                                                  ui::GameUi *gameUi,
@@ -150,7 +175,7 @@ public:
         return std::make_shared<maze::MazeGame>(
             gameState,
             gameUi,
-            std::make_shared<maze::MazeMap>(maze::MazeMap::makeRandom(16, 16)),
+            std::make_shared<maze::MazeMap>(maze::MazeMap::makeRandom(8, mazeSeed)),
             result);
     }
 };

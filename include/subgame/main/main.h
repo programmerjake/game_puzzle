@@ -29,6 +29,7 @@
 #include "subgame/main/and_gate.h"
 #include "subgame/main/or_gate.h"
 #include "subgame/main/run_game.h"
+#include "ui/label.h"
 
 namespace programmerjake
 {
@@ -45,6 +46,7 @@ private:
     std::shared_ptr<Audio> doorOpenSound;
     std::shared_ptr<Door> door;
     std::vector<std::shared_ptr<Machine>> machines;
+    std::shared_ptr<ui::Label> instructionsLabel;
     bool didReset = false;
     float doorPosition = -0.4;
     float afterOpenTimeLeft = 1;
@@ -80,7 +82,13 @@ public:
             add(machine->output);
             machine->output->layout();
         }
+        add(instructionsLabel);
         Subgame::reset();
+    }
+    virtual void layout() override
+    {
+        instructionsLabel->moveBottomTo(minY);
+        Subgame::layout();
     }
     virtual void move(double deltaTime) override
     {

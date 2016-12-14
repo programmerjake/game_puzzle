@@ -150,6 +150,7 @@ public:
         switch(event.key)
         {
         case KeyboardKey::Escape:
+        case KeyboardKey::P:
         {
             startMainMenu();
             return true;

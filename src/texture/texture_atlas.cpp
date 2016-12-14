@@ -55,6 +55,7 @@ checked_array<TextureAtlas::ImageDescriptor, TextureAtlas::textureCount> &Textur
         TextureAtlas::ImageDescriptor(L"textures.png", 256, 256),
         TextureAtlas::ImageDescriptor(L"steel.png", 256, 256),
         TextureAtlas::ImageDescriptor(L"platform_screenshot.png", 128, 128),
+        TextureAtlas::ImageDescriptor(L"maze_screenshot.png", 512, 512),
     };
     return retval;
 }
@@ -77,6 +78,7 @@ const TextureAtlas TextureAtlas::Font8x8 = {0, 0, 128, 128, 0},
                    TextureAtlas::Blank = {90, 106, 4, 4, 0},
                    TextureAtlas::Steel = {0, 0, 256, 256, 1},
                    TextureAtlas::PlatformScreenshot = {0, 0, 128, 128, 2},
+                   TextureAtlas::MazeScreenshot = {0, 0, 512, 512, 3},
                    TextureAtlas::MazeWall1 = {128, 0, 16, 16, 0},
                    TextureAtlas::MazeWall2 = {144, 0, 16, 16, 0},
                    TextureAtlas::MazeWall3 = {128, 16, 16, 16, 0},

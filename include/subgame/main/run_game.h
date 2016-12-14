@@ -97,13 +97,13 @@ protected:
      */
     virtual void render(Renderer &renderer, float minZ, float maxZ, bool hasFocus) override
     {
-        constexpr auto textColor = RGBF(0, 0, 0);
-        auto color = RGBF(0.5, 0.4, 0.4);
-        auto selectedColor = scaleF(1.1, color);
+        auto textColor = RGBF(0, 0, 0);
+        auto selectedTextColor = RGBF(0, 0, 1);
+        auto imageColor = colorizeIdentity();
         const auto textProperties = Text::defaultTextProperties;
         float backgroundZ = 0.5f * (minZ + maxZ);
         if(hasFocus)
-            color = selectedColor;
+        	textColor = selectedTextColor;
         auto &text = subgameMaker->name;
         float textWidth = Text::width(text, textProperties);
         float textHeight = Text::height(text, textProperties);
@@ -113,16 +113,18 @@ protected:
             textHeight = 1;
         float textScale = reservedTextHeight / textHeight;
         textScale = std::min<float>(textScale, (maxX - minX) / textWidth);
+        if(!hasFocus)
+        	textScale *= 0.9f;
         renderer << Generate::quadrilateral(
             subgameMaker->screenshot,
             VectorF(minX * backgroundZ, (minY + reservedTextHeight) * backgroundZ, -backgroundZ),
-            color,
+			imageColor,
             VectorF(maxX * backgroundZ, (minY + reservedTextHeight) * backgroundZ, -backgroundZ),
-            color,
+			imageColor,
             VectorF(maxX * backgroundZ, maxY * backgroundZ, -backgroundZ),
-            color,
+			imageColor,
             VectorF(minX * backgroundZ, maxY * backgroundZ, -backgroundZ),
-            color);
+			imageColor);
         float xOffset = -0.5f * textWidth, yOffset = -0.5f * textHeight;
         xOffset = textScale * xOffset + 0.5f * (minX + maxX);
         yOffset = textScale * yOffset + 0.5f * (minY + minY + reservedTextHeight);

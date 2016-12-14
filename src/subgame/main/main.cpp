@@ -36,13 +36,20 @@ MainGame::MainGame(std::shared_ptr<GameState> gameState, ui::GameUi *gameUi)
     : Subgame(std::move(gameState), gameUi, false, RGBF(0.75, 0.75, 0.75)),
       backgroundMusic(std::make_shared<Audio>(L"main.ogg", true)),
       doorOpenSound(std::make_shared<Audio>(L"door_open.ogg")),
-      door(std::make_shared<Door>())
+      door(std::make_shared<Door>()),
+      instructionsLabel(std::make_shared<ui::Label>(
+          L"Try to solve the puzzle by turning on the power to open the door.",
+          -1.0f,
+          1.0f,
+          0,
+          0.05f,
+          RGBF(1, 0, 0)))
 {
     addMachine(door);
     auto toggleSwitch1 = std::make_shared<ToggleSwitch>(0.6f, -0.3f);
     addMachine(toggleSwitch1);
-    auto toggleSwitch2 =
-        std::make_shared<RunGame>(0.6f, 0, std::make_shared<maze::MazeGameMaker>(), gameState, gameUi);
+    auto toggleSwitch2 = std::make_shared<RunGame>(
+        0.6f, 0, std::make_shared<maze::MazeGameMaker>(), gameState, gameUi);
     addMachine(toggleSwitch2);
     auto toggleSwitch3 = std::make_shared<ToggleSwitch>(0.6f, 0.3);
     addMachine(toggleSwitch3);
